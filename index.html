@@ -32,15 +32,23 @@
 
     // Function to fetch and parse CSV data
     async function fetchCSVData() {
-        const response = await fetch('Data.csv');
-        const text = await response.text();
-        csvData = parseCSV(text);
+        try {
+            const response = await fetch('Data.csv');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const text = await response.text();
+            csvData = parseCSV(text);
+            console.log('CSV Data Loaded:', csvData); // Log data untuk debugging
+        } catch (error) {
+            console.error('Error fetching CSV data:', error);
+        }
     }
 
     // Function to parse CSV text into an array
     function parseCSV(text) {
         const rows = text.split('\n').map(row => row.split(','));
-        return rows;
+        return rows.filter(row => row.length > 1); // Menghindari baris kosong
     }
 
     // Call the fetch function when the page loads
@@ -51,7 +59,7 @@
     document.getElementById('searchInput').addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
             const query = this.value.toLowerCase();
-            const results = csvData.filter(row => row[1].toLowerCase().includes(query)); // Mencari berdasarkan nama
+            const results = csvData.filter(row => row[1] && row[1].toLowerCase().includes(query)); // Mencari berdasarkan nama
             displayResults(results);
         }
     });
