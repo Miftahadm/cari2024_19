@@ -2,6 +2,200 @@
  <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zombie's Love Game</title>
+    <p>Zombie's Love Game</p><br>[note: tangkap & islamkan kotak merah]
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .player {
+            width: 20px;
+            height: 20px;
+            background-color: green;
+            position: absolute;
+        }
+        .guard {
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            position: absolute;
+        }
+        #gameBoard {
+            border: 2px solid red; /* Mengubah warna garis menjadi merah */
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div class="relative w-72 h-96 mb-4" id="gameBoard">
+        <div class="player" id="player" style="top: 90%; left: 50%; transform: translate(-50%, -50%);"></div>
+        <div class="guard" id="guard1" style="top: 20%; left: 10%;"></div>
+        <div class="guard" id="guard2" style="top: 50%; left: 10%;"></div>
+        <div class="guard" id="guard3" style="top: 40%; left: 10%;"></div>
+        <div class="guard" id="guard4" style="top: 70%; left: 10%;"></div>
+        <div class="guard" id="guard5" style="top: 60%; left: 10%;"></div>
+        <div class="guard" id="guard6" style="top: 90%; left: 10%;"></div>
+        <div class="guard" id="guard7" style="top: 10%; left: 10%;"></div>
+
+    </div>
+    <div class="flex space-x-2">
+        <button class="px-4 py-2 bg-blue-500 text-white rounded" onclick="movePlayer('up')">Up</button>
+        <button class="px-4 py-2 bg-blue-500 text-white rounded" onclick="movePlayer('down')">Down</button>
+        <button class="px-4 py-2 bg-blue-500 text-white rounded" onclick="movePlayer('left')">Left</button>
+        <button class="px-4 py-2 bg-blue-500 text-white rounded" onclick="movePlayer('right')">Right</button>
+    </div>
+    <script>
+        const player = document.getElementById('player');
+        const guards = [document.getElementById('guard1'), document.getElementById('guard2'), document.getElementById('guard3'), document.getElementById('guard4'), document.getElementById('guard5'), document.getElementById('guard6'), document.getElementById('guard7')];
+        const step = 10;
+
+        function movePlayer(direction) {
+            const rect = player.getBoundingClientRect();
+            const boardRect = document.getElementById('gameBoard').getBoundingClientRect();
+
+            switch (direction) {
+                case 'up':
+                    if (rect.top - step > boardRect.top) {
+                        player.style.top = `${player.offsetTop - step}px`;
+                    }
+                    break;
+                case 'down':
+                    if (rect.bottom + step < boardRect.bottom) {
+                        player.style.top = `${player.offsetTop + step}px`;
+                    }
+                    break;
+                case 'left':
+                    if (rect.left - step > boardRect.left) {
+                        player.style.left = `${player.offsetLeft - step}px`;
+                    }
+                    break;
+                case 'right':
+                    if (rect.right + step < boardRect.right) {
+                        player.style.left = `${player.offsetLeft + step}px`;
+                    }
+                    break;
+            }
+        }
+
+        function moveGuard(guard) {
+            const boardRect = document.getElementById('gameBoard').getBoundingClientRect();
+            const randomX = Math.random() * (boardRect.width - 20); // 20 is the width of the guard
+            const randomY = Math.random() * (boardRect.height - 20); // 20 is the height of the guard
+            guard.style.left = `${randomX}px`;
+            guard.style.top = `${randomY}px`;
+        }
+
+        function randomizeGuards() {
+            guards.forEach(guard => moveGuard(guard));
+        }
+
+        // Set interval to move guards every 1 second
+        setInterval(randomizeGuards, 1000);
+    </script>
+
+    <style>
+    .player {
+        width: 20px;
+        height: 20px;
+        background-color: green;
+        position: absolute;
+    }
+    .guard {
+        width: 20px;
+        height: 20px;
+        background-color: red;
+        position: absolute;
+    }
+    .guard-love {
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 20px solid blue;
+        position: absolute;
+        transform: rotate(45deg);
+    }
+    .guard-love::before {
+        content: '';
+        width: 20px;
+        height: 20px;
+        background-color: blue;
+        border-radius: 50%;
+        position: absolute;
+        left: -10px;
+        top: -10px;
+    }
+    .guard-love::after {
+        content: '';
+        width: 20px;
+        height: 20px;
+        background-color: blue;
+        border-radius: 50%;
+        position: absolute;
+        left: 0;
+        top: -10px;
+    }
+</style>
+
+<script>
+    function checkCollision() {
+        const playerRect = player.getBoundingClientRect();
+        guards.forEach(guard => {
+            const guardRect = guard.getBoundingClientRect();
+            if (
+                playerRect.x < guardRect.x + guardRect.width &&
+                playerRect.x + playerRect.width > guardRect.x &&
+                playerRect.y < guardRect.y + guardRect.height &&
+                playerRect.y + playerRect.height > guardRect.y
+            ) {
+                // Jika terjadi tabrakan, ubah guard menjadi bentuk love
+                transformGuardToLove(guard);
+            }
+        });
+    }
+
+    function transformGuardToLove(guard) {
+        // Hapus guard yang ada
+        guard.remove();
+        // Buat elemen love baru
+        const love = document.createElement('div');
+        love.className = 'guard-love';
+        love.style.top = guard.style.top;
+        love.style.left = guard.style.left;
+        document.getElementById('gameBoard').appendChild(love);
+    }
+
+    function movePlayer(direction) {
+        const rect = player.getBoundingClientRect();
+        const boardRect = document.getElementById('gameBoard').getBoundingClientRect();
+
+        switch (direction) {
+            case 'up':
+                if (rect.top - step > boardRect.top) {
+                    player.style.top = `${player.offsetTop - step}px`;
+                }
+                break;
+            case 'down':
+                if (rect.bottom + step < boardRect.bottom) {
+                    player.style.top = `${player.offsetTop + step}px`;
+                }
+                break;
+            case 'left':
+                if (rect.left - step > boardRect.left) {
+                    player.style.left = `${player.offsetLeft - step}px`;
+                }
+                break;
+            case 'right':
+                if (rect.right + step < boardRect.right) {
+                    player.style.left = `${player.offsetLeft + step}px`;
+                }
+                break;
+        }
+        checkCollision(); // Periksa tabrakan setelah setiap gerakan
+    }
+</script>
+</body>
+<br>
   <title>
    Panca Jiwa Trubus Iman
   </title>
@@ -18,9 +212,6 @@
    <h1 class="text-center text-4xl font-bold text-yellow-700 mb-4">
     Panca Jiwa <br> Trubus Iman
    </h1>
-       <canvas id="canvas"></canvas>
-    <script src="kembangapi.js"></script>
-
    <div class="text-center text-lg space-y-2">
     <p>
      KEIKHLASAN
