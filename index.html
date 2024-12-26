@@ -1,91 +1,41 @@
-<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruang Administrasi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <style>
-        .google-font {
-            font-family: 'Product Sans', sans-serif;
-        }
-    </style>
-</head>
-<div class="text-center mb-8">
-    <img src="https://trubusiman.sch.id/wp-content/uploads/2023/02/Desain-tanpa-judul.png" alt="Logo" class="mb-4 mx-auto" style="max-width: 100px;"> <!-- Gambar logo -->
-<body class="bg-green-900 flex flex-col items-center justify-center min-h-screen">
-    <div class="text-center mb-8">
-        <h1 class="text-white text-3xl google-font mb-8">Ruang Administrasi</h1>
-        <div class="flex items-center bg-gray-900 rounded-full px-4 py-2 w-80 mx-auto">
-            <input id="searchInput" type="text" class="bg-transparent text-gray-400 flex-grow text-lg outline-none" placeholder="Search...">
-    <a href="https://docs.google.com/spreadsheets/d/1cewHgxOtgzwJcgMDf1I8EaJ2H9HXYsvK_REiu2Cv0Vo/edit?usp=drive_link" target="_blank">
-        <i class="fas fa-book text-gray-400 mx-2"></i>
-            <a href="https://wa.me/+6281532920683" target="_blank">
-                <i class="fab fa-whatsapp text-gray-400"></i>
-            </a>
-        </div>
-    </div>
-    <div id="results" class="text-white w-80"></div>
-<script>
-    let csvData = [];
-
-    // Function to fetch and parse CSV data
-    async function fetchCSVData() {
-        const response = await fetch('Data.csv');
-        const text = await response.text();
-        csvData = parseCSV(text);
-    }
-
-    // Function to parse CSV text into an array
-    function parseCSV(text) {
-        const rows = text.split('\n').map(row => row.split(','));
-        return rows;
-    }
-
-    // Call the fetch function when the page loads
-    window.onload = function() {
-        fetchCSVData();
-    };
-
-    document.getElementById('searchInput').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            const query = this.value.toLowerCase();
-            const results = csvData.filter(row => row[1].toLowerCase().includes(query)); // Mencari berdasarkan nama
-            displayResults(results);
-        }
-    });
-
-    function displayResults(results) {
-        const resultsContainer = document.getElementById('results');
-        resultsContainer.innerHTML = '';
-
-        if (results.length === 0) {
-            resultsContainer.innerHTML = '<div class="text-gray-400 p-4">No results found.</div>';
-            return;
-        }
-
-        results.forEach(result => {
-            const resultItem = document.createElement('div');
-            resultItem.className = 'bg-gray-800 p-4 rounded mb-2 shadow-lg transition-transform transform hover:scale-105';
-            resultItem.innerHTML = `
-                <h2 class="text-lg font-semibold text-white">${result[1]}</h2>
-                <p class="text-gray-400">Kelas: ${result[0]}</p>
-                <p class="text-gray-400">SPP Sudah Dibayarkan: ${result[2]}</p>
-                <a href="${result[9]}" class="text-blue-400 underline">Download Rapor</a>
-            `;
-            resultsContainer.appendChild(resultItem);
-        });
-    }
-</script>
-
-<a id="homeButton" href="Walas.html" class="fixed bottom-4 right-4 bg-gray-800 text-white p-3 rounded-full shadow-lg hover:bg-gray-700 transition">
-    <i class="fas fa-home"></i>
-</a>
-
-<a id="starButton" href="Bisnis.html" class="fixed bottom-4 right-16 bg-yellow-400 text-white p-3 rounded-full shadow-lg hover:bg-yellow-200 transition">
-    <i class="fas fa-star"></i>
-</a>
-    
-</body>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Panca Jiwa Trubus Iman
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+ </head>
+ <body class="bg-black text-white flex items-center justify-center min-h-screen">
+  <div class="border-8 border-yellow-700 p-4">
+   <div class="flex justify-center mb-4">
+    <img alt="Garuda Panca Jiwa Trubus Iman emblem with five symbols" class="w-40 h-40" height="300" src="https://trubusiman.sch.id/wp-content/uploads/2023/02/Desain-tanpa-judul.png" width="300"/>
+    <img alt="Garuda Panca Jiwa Trubus Iman emblem with five symbols" class="w-40 h-40" height="300" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZTbs23oBOwvSI9Xa48Uh6slAEdPS_bCviLA&s" width="300"/>   
+</div>
+   <h1 class="text-center text-4xl font-bold text-yellow-700 mb-4">
+    Panca Jiwa <br> Trubus Iman
+   </h1>
+   <div class="text-center text-lg space-y-2">
+    <p>
+     KEIKHLASAN
+    </p>
+    <p>
+     KESEDERHANAAN
+    </p>
+    <p>
+     BERDIKARI
+    </p>
+    <p>
+     UKHUWWAH ISLAMIYYAH
+    </p>
+    <p>
+     KEBEBASAN
+    </p>
+   </div>
+   </div>
+  </div>
+ </body>
 </html>
